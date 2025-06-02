@@ -8,8 +8,8 @@ env = environ.Env(
 )
 environ.Env.read_env()
 
-# Base directory
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Base directory - adjusted to your current structure where settings.py is in root
+BASE_DIR = Path(__file__).resolve().parent  # removed .parent.parent
 
 # Security settings
 SECRET_KEY = env('SECRET_KEY')
@@ -27,7 +27,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
-    'drf_yasg',
+    'drf_yasg',      # Swagger/OpenAPI docs
     'listings',
 ]
 
@@ -42,12 +42,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'alx_travel_app.urls'
+# Use plain 'urls' instead of 'alx_travel_app.urls' since urls.py is in root
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # Add template dirs here if needed
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -59,7 +60,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'alx_travel_app.wsgi.application'
+# Use plain 'wsgi.application' since wsgi.py is in root
+WSGI_APPLICATION = 'wsgi.application'
 
 # Database - MySQL config using .env
 DATABASES = {
@@ -73,13 +75,17 @@ DATABASES = {
     }
 }
 
-# REST Framework
+# REST Framework configuration
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',  # Use openapi schema (fixes coreapi error)
 }
 
 # CORS Settings
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True  # For development only, consider restricting in production
+# Example for production:
+# CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[
+#     "http://localhost:3000",
+# ])
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
